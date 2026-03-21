@@ -4,59 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Configurable Leaderboard</title>
+
+<meta name="robots" content="noindex, nofollow">
+  
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 20px;
-  }
+Â  body {
+Â  Â  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+Â  Â  background: #f0f2f5;
+Â  Â  display: flex;
+Â  Â  flex-direction: column;
+Â  Â  align-items: center;
+Â  Â  padding: 50px 20px;
+Â  }
 
-  h1 {
-    color: #333;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+Â  h1 {
+Â  Â  color: #333;
+Â  Â  margin-bottom: 40px;
+Â  Â  text-transform: uppercase;
+Â  Â  letter-spacing: 1px;
+Â  }
 
-  table {
-    border-collapse: collapse;
-    width: 80%;
-    max-width: 700px;
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
+Â  table {
+Â  Â  border-collapse: collapse;
+Â  Â  width: 80%;
+Â  Â  max-width: 700px;
+Â  Â  background: #fff;
+Â  Â  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+Â  Â  border-radius: 8px;
+Â  Â  overflow: hidden;
+Â  }
 
-  th, td {
-    padding: 15px 25px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    transition: all 0.3s ease;
-  }
+Â  th, td {
+Â  Â  padding: 15px 25px;
+Â  Â  border-bottom: 1px solid #ddd;
+Â  Â  text-align: left;
+Â  Â  transition: all 0.3s ease;
+Â  }
 
-  th {
-    background-color: #333;
-    color: #fff;
-    font-size: 1.1em;
-    letter-spacing: 1px;
-  }
+Â  th {
+Â  Â  background-color: #333;
+Â  Â  color: #fff;
+Â  Â  font-size: 1.1em;
+Â  Â  letter-spacing: 1px;
+Â  }
 
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+Â  tr:nth-child(even) {
+Â  Â  background-color: #f9f9f9;
+Â  }
 
-  tr:hover {
-    background-color: #a8d0e6;
-    transform: scale(1.02);
-  }
+Â  tr:hover {
+Â  Â  background-color: #a8d0e6;
+Â  Â  transform: scale(1.02);
+Â  }
 
-  tr {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
+Â  tr {
+Â  Â  transition: background-color 0.3s ease, transform 0.3s ease;
+Â  }
 </style>
 </head>
 <body>
@@ -64,45 +67,45 @@
 <h1>My Configurable Leaderboard</h1>
 
 <table id="leaderboard">
-  <tr>
-    <th>Rank</th>
-    <th>Name</th>
-  </tr>
+Â  <tr>
+Â  Â  <th>Rank</th>
+Â  Â  <th>Name</th>
+Â  </tr>
 </table>
 
 <script>
-  // ===== CONFIGURE YOUR PLAYERS HERE =====
-  const players = [
-    "Alice",
-    "Bob",
-    "Charlie",
-    "David",
-    "Eve",
-    "Frank"
-  ];
+Â  // ===== CONFIGURE YOUR PLAYERS HERE =====
+Â  const players = [
+Â  Â  "Alice",
+Â  Â  "Bob",
+Â  Â  "Charlie",
+Â  Â  "David",
+Â  Â  "Eve",
+Â  Â  "Frank"
+Â  ];
 
-  const table = document.getElementById("leaderboard");
+Â  const table = document.getElementById("leaderboard");
 
-  players.forEach((player, index) => {
-    const row = document.createElement("tr");
-    
-    // Rank
-    const rankCell = document.createElement("td");
-    rankCell.textContent = index + 1;
-    row.appendChild(rankCell);
+Â  players.forEach((player, index) => {
+Â  Â  const row = document.createElement("tr");
+Â  Â Â 
+Â  Â  // Rank
+Â  Â  const rankCell = document.createElement("td");
+Â  Â  rankCell.textContent = index + 1;
+Â  Â  row.appendChild(rankCell);
 
-    // Name
-    const nameCell = document.createElement("td");
-    nameCell.textContent = player;
-    row.appendChild(nameCell);
+Â  Â  // Name
+Â  Â  const nameCell = document.createElement("td");
+Â  Â  nameCell.textContent = player;
+Â  Â  row.appendChild(nameCell);
 
-    // Highlight top 3
-    if(index === 0) row.style.backgroundColor = "#ffd700"; // Gold
-    if(index === 1) row.style.backgroundColor = "#c0c0c0"; // Silver
-    if(index === 2) row.style.backgroundColor = "#cd7f32"; // Bronze
+Â  Â  // Highlight top 3
+Â  Â  if(index === 0) row.style.backgroundColor = "#ffd700"; // Gold
+Â  Â  if(index === 1) row.style.backgroundColor = "#c0c0c0"; // Silver
+Â  Â  if(index === 2) row.style.backgroundColor = "#cd7f32"; // Bronze
 
-    table.appendChild(row);
-  });
+Â  Â  table.appendChild(row);
+Â  });
 </script>
 
 </body>
