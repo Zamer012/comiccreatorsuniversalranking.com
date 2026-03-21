@@ -8,22 +8,21 @@
 
 <style>
   :root {
-    --bg-1: #050505;
-    --bg-2: #0b0b10;
-    --bg-3: #111118;
-    --card: rgba(18, 18, 24, 0.72);
+    --bg-1: #030305;
+    --bg-2: #08080c;
+    --bg-3: #101018;
+    --card: rgba(16, 16, 22, 0.74);
     --card-border: rgba(255, 255, 255, 0.10);
-    --text: #f4f7fb;
-    --muted: #a6adbb;
-    --header: rgba(255, 255, 255, 0.06);
-    --row: rgba(255, 255, 255, 0.03);
-    --row-hover: rgba(255, 255, 255, 0.08);
+    --text: #f5f7fb;
+    --muted: #aab2c2;
+    --soft: rgba(255, 255, 255, 0.05);
+    --soft-2: rgba(255, 255, 255, 0.08);
+    --gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    --silver: linear-gradient(135deg, #d7dde8 0%, #9aa8c7 100%);
+    --bronze: linear-gradient(135deg, #d59b6f 0%, #9f6a40 100%);
     --accent: #8b5cf6;
     --accent-2: #22d3ee;
-    --gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    --silver: linear-gradient(135deg, #d7dde8 0%, #98a8c8 100%);
-    --bronze: linear-gradient(135deg, #d59b6f 0%, #9f6a40 100%);
-    --shadow: 0 24px 80px rgba(0,0,0,0.45);
+    --shadow: 0 28px 90px rgba(0, 0, 0, 0.50);
   }
 
   * {
@@ -39,10 +38,10 @@
     font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text);
     background:
-      radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18), transparent 28%),
-      radial-gradient(circle at 80% 25%, rgba(34, 211, 238, 0.12), transparent 26%),
-      radial-gradient(circle at 50% 85%, rgba(255, 255, 255, 0.05), transparent 30%),
-      linear-gradient(180deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
+      radial-gradient(circle at 18% 18%, rgba(139, 92, 246, 0.16), transparent 26%),
+      radial-gradient(circle at 82% 24%, rgba(34, 211, 238, 0.12), transparent 24%),
+      radial-gradient(circle at 50% 88%, rgba(255, 255, 255, 0.05), transparent 28%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
     overflow-x: hidden;
     display: grid;
     place-items: center;
@@ -52,43 +51,43 @@
   .bg-blobs {
     position: fixed;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    z-index: 0;
   }
 
   .blob {
     position: absolute;
     border-radius: 999px;
-    filter: blur(45px);
-    opacity: 0.32;
-    animation: float 14s ease-in-out infinite;
+    filter: blur(55px);
+    opacity: 0.28;
+    animation: float 16s ease-in-out infinite;
   }
 
   .blob.one {
-    width: 260px;
-    height: 260px;
-    background: rgba(139, 92, 246, 0.35);
-    top: 8%;
-    left: 5%;
+    width: 280px;
+    height: 280px;
+    top: 10%;
+    left: 6%;
+    background: rgba(139, 92, 246, 0.32);
   }
 
   .blob.two {
-    width: 320px;
-    height: 320px;
-    background: rgba(34, 211, 238, 0.25);
-    top: 55%;
-    right: 3%;
-    animation-duration: 18s;
+    width: 340px;
+    height: 340px;
+    top: 54%;
+    right: 4%;
+    background: rgba(34, 211, 238, 0.24);
+    animation-duration: 19s;
   }
 
   .blob.three {
-    width: 220px;
-    height: 220px;
-    background: rgba(255, 255, 255, 0.10);
-    bottom: 6%;
-    left: 30%;
-    animation-duration: 20s;
+    width: 240px;
+    height: 240px;
+    bottom: 8%;
+    left: 28%;
+    background: rgba(255, 255, 255, 0.08);
+    animation-duration: 22s;
   }
 
   @keyframes float {
@@ -97,7 +96,7 @@
   }
 
   .wrap {
-    width: min(100%, 980px);
+    width: min(100%, 1040px);
     position: relative;
     z-index: 1;
     display: grid;
@@ -106,7 +105,7 @@
 
   .hero {
     text-align: center;
-    padding: 8px 12px 6px;
+    padding: 8px 12px 4px;
   }
 
   .eyebrow {
@@ -136,28 +135,28 @@
 
   h1 {
     margin: 0;
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
     line-height: 1.02;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.05em;
     text-wrap: balance;
   }
 
   .subtitle {
     margin: 14px auto 0;
-    max-width: 720px;
+    max-width: 760px;
     color: var(--muted);
     font-size: clamp(0.98rem, 1.8vw, 1.08rem);
     line-height: 1.7;
   }
 
   .card {
+    position: relative;
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 28px;
+    border-radius: 30px;
     box-shadow: var(--shadow);
     backdrop-filter: blur(18px);
     overflow: hidden;
-    position: relative;
   }
 
   .card::before {
@@ -165,8 +164,23 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.08), transparent 35%),
+      linear-gradient(135deg, rgba(255,255,255,0.10), transparent 34%),
       linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+    pointer-events: none;
+  }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.20), rgba(34,211,238,0.12), rgba(255,255,255,0.03));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
     pointer-events: none;
   }
 
@@ -182,12 +196,12 @@
 
   .card-top .left {
     display: grid;
-    gap: 3px;
+    gap: 4px;
   }
 
   .card-top .title {
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.06rem;
     letter-spacing: 0.02em;
   }
 
@@ -206,6 +220,47 @@
     white-space: nowrap;
   }
 
+  .card-note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    background:
+      linear-gradient(90deg, rgba(139,92,246,0.10), rgba(34,211,238,0.06)),
+      rgba(255,255,255,0.02);
+  }
+
+  .note-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(139,92,246,0.9), rgba(34,211,238,0.75));
+    box-shadow: 0 14px 30px rgba(0,0,0,0.30);
+    font-size: 1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .note-text {
+    display: grid;
+    gap: 3px;
+  }
+
+  .note-title {
+    font-weight: 700;
+    color: #edf2ff;
+    font-size: 0.95rem;
+  }
+
+  .note-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
   .table-wrap {
     overflow-x: auto;
   }
@@ -219,7 +274,7 @@
   thead th {
     text-align: left;
     padding: 18px 22px;
-    background: var(--header);
+    background: rgba(255,255,255,0.05);
     color: #dfe6f3;
     font-size: 0.88rem;
     letter-spacing: 0.12em;
@@ -238,12 +293,11 @@
   }
 
   tbody tr {
-    background: var(--row);
+    background: rgba(255,255,255,0.025);
     transition:
       transform 220ms ease,
       background-color 220ms ease,
-      box-shadow 220ms ease,
-      border-color 220ms ease;
+      box-shadow 220ms ease;
   }
 
   tbody tr + tr td {
@@ -251,9 +305,9 @@
   }
 
   tbody tr:hover {
-    background: var(--row-hover);
+    background: rgba(255,255,255,0.07);
     transform: translateY(-2px) scale(1.005);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
   }
 
   td {
@@ -297,7 +351,7 @@
     place-items: center;
     font-weight: 800;
     color: #fff;
-    background: linear-gradient(135deg, rgba(139,92,246,0.85), rgba(34,211,238,0.75));
+    background: linear-gradient(135deg, rgba(139,92,246,0.88), rgba(34,211,238,0.78));
     box-shadow: 0 12px 24px rgba(0,0,0,0.28);
     flex: 0 0 auto;
     border: 1px solid rgba(255,255,255,0.16);
@@ -305,19 +359,13 @@
 
   .name-block {
     display: grid;
-    gap: 4px;
+    gap: 2px;
   }
 
   .name {
     font-weight: 700;
     font-size: 1rem;
     line-height: 1.1;
-  }
-
-  .meta {
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.2;
   }
 
   .badge {
@@ -339,15 +387,15 @@
   }
 
   .top-1 {
-    background: linear-gradient(135deg, rgba(246,211,101,0.20), rgba(253,160,133,0.12));
+    background: linear-gradient(135deg, rgba(246,211,101,0.18), rgba(253,160,133,0.10));
   }
 
   .top-2 {
-    background: linear-gradient(135deg, rgba(215,221,232,0.16), rgba(152,168,200,0.10));
+    background: linear-gradient(135deg, rgba(215,221,232,0.14), rgba(152,168,200,0.09));
   }
 
   .top-3 {
-    background: linear-gradient(135deg, rgba(213,155,111,0.16), rgba(159,106,64,0.10));
+    background: linear-gradient(135deg, rgba(213,155,111,0.14), rgba(159,106,64,0.08));
   }
 
   .top-1 .rank-badge {
@@ -388,6 +436,10 @@
   @media (max-width: 720px) {
     .card-top {
       flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .card-note {
       align-items: flex-start;
     }
 
@@ -447,6 +499,16 @@
         <div class="pill" id="countPill">0 members</div>
       </div>
 
+      <div class="card-note">
+        <div class="note-icon">✦</div>
+        <div class="note-text">
+          <div class="note-title">About this board</div>
+          <div class="note-desc" id="cardDescription">
+            Use the CONFIG section in the code to change names, tags, titles, and ranking order. The page updates automatically when you refresh.
+          </div>
+        </div>
+      </div>
+
       <div class="table-wrap">
         <table id="leaderboard">
           <thead>
@@ -462,7 +524,7 @@
     </section>
 
     <div class="footer">
-      Edit the <strong>CONFIG</strong> section in the code to customize names, titles, and tags.
+      Edit the <strong>CONFIG</strong> section in the code to customize names, titles, description, and tags.
     </div>
   </main>
 
@@ -470,9 +532,10 @@
     const CONFIG = {
       pageTitle: "Comic Creators Leaderboard",
       eyebrowText: "Rankings",
-      subtitle: "The damnation of all Comic Gods. fro bottom low weakest to top high strongest of the Comic Creators.",
+      subtitle: "The damnation of all Comic Gods. From bottom weak to top strong, this board shows the current order of the Comic Creators.",
       cardTitle: "Current Rankings",
       cardHint: "Top 3 are cool ngl",
+      cardDescription: "This board is fully configurable. Change the player order in the CONFIG list, edit tags, or rename the title and subtitle whenever you want.",
       players: [
         { name: "Zamer012", tag: "dunno" },
         { name: "Guest10", tag: "God of luck" },
@@ -496,6 +559,7 @@
     document.getElementById("pageSubtitle").textContent = CONFIG.subtitle;
     document.getElementById("cardTitle").textContent = CONFIG.cardTitle;
     document.getElementById("cardHint").textContent = CONFIG.cardHint;
+    document.getElementById("cardDescription").textContent = CONFIG.cardDescription;
     document.getElementById("countPill").textContent = `${CONFIG.players.length} member${CONFIG.players.length === 1 ? "" : "s"}`;
 
     const tbody = document.querySelector("#leaderboard tbody");
@@ -521,7 +585,6 @@
           <div class="avatar">${initials(player.name)}</div>
           <div class="name-block">
             <div class="name">${player.name}</div>
-            <div class="meta">Manually ranked</div>
           </div>
         </div>
       `;
