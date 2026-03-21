@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configurable Leaderboard</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 700px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 15px 25px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    transition: all 0.3s ease;
+  }
+
+  th {
+    background-color: #333;
+    color: #fff;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #a8d0e6;
+    transform: scale(1.02);
+  }
+
+  tr {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+</style>
+</head>
+<body>
+
+<h1>My Configurable Leaderboard</h1>
+
+<table id="leaderboard">
+  <tr>
+    <th>Rank</th>
+    <th>Name</th>
+  </tr>
+</table>
+
+<script>
+  // ===== CONFIGURE YOUR PLAYERS HERE =====
+  const players = [
+    "Alice",
+    "Bob",
+    "Charlie",
+    "David",
+    "Eve",
+    "Frank"
+  ];
+
+  const table = document.getElementById("leaderboard");
+
+  players.forEach((player, index) => {
+    const row = document.createElement("tr");
+    
+    // Rank
+    const rankCell = document.createElement("td");
+    rankCell.textContent = index + 1;
+    row.appendChild(rankCell);
+
+    // Name
+    const nameCell = document.createElement("td");
+    nameCell.textContent = player;
+    row.appendChild(nameCell);
+
+    // Highlight top 3
+    if(index === 0) row.style.backgroundColor = "#ffd700"; // Gold
+    if(index === 1) row.style.backgroundColor = "#c0c0c0"; // Silver
+    if(index === 2) row.style.backgroundColor = "#cd7f32"; // Bronze
+
+    table.appendChild(row);
+  });
+</script>
+
+</body>
+</html>
+
