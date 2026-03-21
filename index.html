@@ -1,113 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
 <title>Configurable Leaderboard</title>
 
-<meta name="robots" content="noindex, nofollow">
-  
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 20px;
-  }
+  :root {
+    --bg-1: #050505;
+    --bg-2: #0b0b10;
+    --bg-3: #111118;
+    --card: rgba(18, 18, 24, 0.72);
+    --card-border: rgba(255, 255, 255, 0.10);
+    --text: #f4f7fb;
+    --muted: #a6adbb;
+    --header: rgba(255, 255, 255, 0.06);
+    --row: rgba(255, 255, 255, 0.03);
+    --row-hover: rgba(255, 255, 255, 0.08);
+    --accent: #8b5cf6;
+    --accent-2: #22d3ee;
+    --gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    --silver: linear-gradient(135deg, #d7dde8 0%, #98a8c8 100%);
+    --bronze: linear-gradient(135deg, #d59b6f 0%, #9f6a40 100%);
+    --shadow: 0 24px 80px rgba(0,0,0,0.45);
+  }
 
-  h1 {
-    color: #333;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+  * {
+    box-sizing: border-box;
+  }
 
-  table {
-    border-collapse: collapse;
-    width: 80%;
-    max-width: 700px;
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
 
-  th, td {
-    padding: 15px 25px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    transition: all 0.3s ease;
-  }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18), transparent 28%),
+      radial-gradient(circle at 80% 25%, rgba(34, 211, 238, 0.12), transparent 26%),
+      radial-gradient(circle at 50% 85%, rgba(255, 255, 255, 0.05), transparent 30%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
+    overflow-x: hidden;
+    display: grid;
+    place-items: center;
+    padding: 40px 18px;
+  }
 
-  th {
-    background-color: #333;
-    color: #fff;
-    font-size: 1.1em;
-    letter-spacing: 1px;
-  }
+  .bg-blobs {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
 
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+  .blob {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(45px);
+    opacity: 0.32;
+    animation: float 14s ease-in-out infinite;
+  }
 
-  tr:hover {
-    background-color: #a8d0e6;
-    transform: scale(1.02);
-  }
+  .blob.one {
+    width: 260px;
+    height: 260px;
+    background: rgba(139, 92, 246, 0.35);
+    top: 8%;
+    left: 5%;
+  }
 
-  tr {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
+  .blob.two {
+    width: 320px;
+    height: 320px;
+    background: rgba(34, 211, 238, 0.25);
+    top: 55%;
+    right: 3%;
+    animation-duration: 18s;
+  }
+
+  .blob.three {
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.10);
+    bottom: 6%;
+    left: 30%;
+    animation-duration: 20s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+    50% { transform: translateY(-18px) translateX(10px) scale(1.05); }
+  }
+
+  .wrap {
+    width: min(100%, 980px);
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 18px;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 8px 12px 6px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    backdrop-filter: blur(12px);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.55);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    margin: 14px auto 0;
+    max-width: 720px;
+    color: var(--muted);
+    font-size: clamp(0.98rem, 1.8vw, 1.08rem);
+    line-height: 1.7;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.08), transparent 35%),
+      linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+    pointer-events: none;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .card-top .left {
+    display: grid;
+    gap: 3px;
+  }
+
+  .card-top .title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+
+  .card-top .hint {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  .pill {
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 18px 22px;
+    background: var(--header);
+    color: #dfe6f3;
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  thead th:first-child {
+    width: 110px;
+  }
+
+  thead th:last-child {
+    width: 120px;
+    text-align: right;
+  }
+
+  tbody tr {
+    background: var(--row);
+    transition:
+      transform 220ms ease,
+      background-color 220ms ease,
+      box-shadow 220ms ease,
+      border-color 220ms ease;
+  }
+
+  tbody tr + tr td {
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  tbody tr:hover {
+    background: var(--row-hover);
+    transform: translateY(-2px) scale(1.005);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+  }
+
+  td {
+    padding: 16px 22px;
+    vertical-align: middle;
+  }
+
+  .rank-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    color: #f2f5ff;
+  }
+
+  .rank-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.20);
+  }
+
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 220px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(139,92,246,0.85), rgba(34,211,238,0.75));
+    box-shadow: 0 12px 24px rgba(0,0,0,0.28);
+    flex: 0 0 auto;
+    border: 1px solid rgba(255,255,255,0.16);
+  }
+
+  .name-block {
+    display: grid;
+    gap: 4px;
+  }
+
+  .name {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.1;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.05);
+    color: #eef2ff;
+    float: right;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .top-1 {
+    background: linear-gradient(135deg, rgba(246,211,101,0.20), rgba(253,160,133,0.12));
+  }
+
+  .top-2 {
+    background: linear-gradient(135deg, rgba(215,221,232,0.16), rgba(152,168,200,0.10));
+  }
+
+  .top-3 {
+    background: linear-gradient(135deg, rgba(213,155,111,0.16), rgba(159,106,64,0.10));
+  }
+
+  .top-1 .rank-badge {
+    background: var(--gold);
+    color: #171717;
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  .top-2 .rank-badge {
+    background: var(--silver);
+    color: #171717;
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  .top-3 .rank-badge {
+    background: var(--bronze);
+    color: #171717;
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  .top-1 .avatar,
+  .top-2 .avatar,
+  .top-3 .avatar {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+  }
+
+  .footer {
+    color: var(--muted);
+    text-align: center;
+    font-size: 0.92rem;
+    padding: 8px 12px 0;
+  }
+
+  .footer strong {
+    color: #eaf0ff;
+  }
+
+  @media (max-width: 720px) {
+    .card-top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .player {
+      min-width: 160px;
+    }
+
+    td, thead th {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .rank-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
 </style>
 </head>
 <body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+  </div>
 
-<h1>My Configurable Leaderboard</h1>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow" id="eyebrowText">Leaderboard</div>
+      <h1 id="pageTitle">My Configurable Leaderboard</h1>
+      <p class="subtitle" id="pageSubtitle">
+        A smooth, dark, manually controlled ranking page. Edit the list in the code to change the order instantly.
+      </p>
+    </section>
 
-<table id="leaderboard">
-  <tr>
-    <th>Rank</th>
-    <th>Name</th>
-  </tr>
-</table>
+    <section class="card">
+      <div class="card-top">
+        <div class="left">
+          <div class="title" id="cardTitle">Current Rankings</div>
+          <div class="hint" id="cardHint">Top 3 are automatically highlighted with special styling.</div>
+        </div>
+        <div class="pill" id="countPill">0 members</div>
+      </div>
 
-<script>
-  // ===== CONFIGURE YOUR PLAYERS HERE =====
-  const players = [
-    "Alice",
-    "Bob",
-    "Charlie",
-    "David",
-    "Eve",
-    "Frank"
-  ];
+      <div class="table-wrap">
+        <table id="leaderboard">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th class="right">Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
 
-  const table = document.getElementById("leaderboard");
+    <div class="footer">
+      Edit the <strong>CONFIG</strong> section in the code to customize names, titles, and tags.
+    </div>
+  </main>
 
-  players.forEach((player, index) => {
-    const row = document.createElement("tr");
-    
-    // Rank
-    const rankCell = document.createElement("td");
-    rankCell.textContent = index + 1;
-    row.appendChild(rankCell);
+  <script>
+    const CONFIG = {
+      pageTitle: "My Configurable Leaderboard",
+      eyebrowText: "Elite Rankings",
+      subtitle: "A smooth, dark, manually controlled ranking page. Edit the list in the code to change the order instantly.",
+      cardTitle: "Current Rankings",
+      cardHint: "Top 3 are automatically highlighted with special styling.",
+      players: [
+        { name: "Zamer012", tag: "dunno" },
+        { name: "Guest10", tag: "God of luck" },
+        { name: "Cham", tag: "Retired :[" },
+        { name: "M.D.A", tag: "4th" },
+        { name: "A.V.C", tag: "5th" },
+        { name: "Kaiju X", tag: "6th" }
+      ]
+    };
 
-    // Name
-    const nameCell = document.createElement("td");
-    nameCell.textContent = player;
-    row.appendChild(nameCell);
+    const initials = (name) =>
+      name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0].toUpperCase())
+        .join("");
 
-    // Highlight top 3
-    if(index === 0) row.style.backgroundColor = "#ffd700"; // Gold
-    if(index === 1) row.style.backgroundColor = "#c0c0c0"; // Silver
-    if(index === 2) row.style.backgroundColor = "#cd7f32"; // Bronze
+    document.getElementById("pageTitle").textContent = CONFIG.pageTitle;
+    document.getElementById("eyebrowText").textContent = CONFIG.eyebrowText;
+    document.getElementById("pageSubtitle").textContent = CONFIG.subtitle;
+    document.getElementById("cardTitle").textContent = CONFIG.cardTitle;
+    document.getElementById("cardHint").textContent = CONFIG.cardHint;
+    document.getElementById("countPill").textContent = `${CONFIG.players.length} member${CONFIG.players.length === 1 ? "" : "s"}`;
 
-    table.appendChild(row);
-  });
-</script>
+    const tbody = document.querySelector("#leaderboard tbody");
 
+    CONFIG.players.forEach((player, index) => {
+      const row = document.createElement("tr");
+
+      if (index === 0) row.classList.add("top-1");
+      if (index === 1) row.classList.add("top-2");
+      if (index === 2) row.classList.add("top-3");
+
+      const rankCell = document.createElement("td");
+      rankCell.innerHTML = `
+        <div class="rank-cell">
+          <div class="rank-badge">${index + 1}</div>
+          <span>#${index + 1}</span>
+        </div>
+      `;
+
+      const playerCell = document.createElement("td");
+      playerCell.innerHTML = `
+        <div class="player">
+          <div class="avatar">${initials(player.name)}</div>
+          <div class="name-block">
+            <div class="name">${player.name}</div>
+            <div class="meta">Manually ranked</div>
+          </div>
+        </div>
+      `;
+
+      const statusCell = document.createElement("td");
+      statusCell.className = "right";
+      statusCell.innerHTML = `<span class="badge">${player.tag || "Member"}</span>`;
+
+      row.appendChild(rankCell);
+      row.appendChild(playerCell);
+      row.appendChild(statusCell);
+      tbody.appendChild(row);
+    });
+  </script>
 </body>
 </html>
-
