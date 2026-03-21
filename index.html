@@ -293,6 +293,7 @@
   }
 
   tbody tr {
+    position: relative;
     background: rgba(255,255,255,0.025);
     transition:
       transform 220ms ease,
@@ -341,6 +342,8 @@
     align-items: center;
     gap: 14px;
     min-width: 220px;
+    position: relative;
+    overflow: visible;
   }
 
   .avatar {
@@ -433,6 +436,111 @@
     color: #eaf0ff;
   }
 
+  /* STAR EFFECTS */
+  .star {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    opacity: 0.0;
+    animation: starTwinkle 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.85));
+  }
+
+  .star::before,
+  .star::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: currentColor;
+    border-radius: 999px;
+  }
+
+  .star::before {
+    width: 100%;
+    height: 18%;
+  }
+
+  .star::after {
+    width: 18%;
+    height: 100%;
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% {
+      transform: scale(0.75) rotate(0deg);
+      opacity: 0.20;
+    }
+    50% {
+      transform: scale(1.15) rotate(18deg);
+      opacity: 1;
+    }
+  }
+
+  .star.gold {
+    color: rgba(255, 238, 128, 1);
+  }
+
+  .star.silver {
+    color: rgba(235, 240, 255, 1);
+  }
+
+  .star.bronze {
+    color: rgba(255, 193, 133, 1);
+  }
+
+  .top-1 .player::before,
+  .top-1 .player::after,
+  .top-2 .player::before,
+  .top-2 .player::after,
+  .top-3 .player::before,
+  .top-3 .player::after {
+    content: "";
+    position: absolute;
+    inset: -8px -10px;
+    border-radius: 22px;
+    pointer-events: none;
+    opacity: 0.0;
+  }
+
+  .top-1 .player::before {
+    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.20), transparent 35%),
+                radial-gradient(circle at 76% 20%, rgba(255,255,255,0.22), transparent 28%),
+                radial-gradient(circle at 84% 74%, rgba(255,255,255,0.14), transparent 26%);
+    animation: shimmerGlow 1.3s ease-in-out infinite;
+    opacity: 0.95;
+    z-index: 0;
+  }
+
+  .top-2 .player::before {
+    background: radial-gradient(circle at 30% 28%, rgba(255,255,255,0.16), transparent 34%),
+                radial-gradient(circle at 72% 68%, rgba(255,255,255,0.12), transparent 26%);
+    animation: shimmerGlow 1.9s ease-in-out infinite;
+    opacity: 0.70;
+    z-index: 0;
+  }
+
+  .top-3 .player::before {
+    background: radial-gradient(circle at 25% 40%, rgba(255,255,255,0.12), transparent 34%),
+                radial-gradient(circle at 70% 55%, rgba(255,255,255,0.10), transparent 26%);
+    animation: shimmerGlow 2.2s ease-in-out infinite;
+    opacity: 0.55;
+    z-index: 0;
+  }
+
+  @keyframes shimmerGlow {
+    0%, 100% { transform: scale(1); filter: blur(0px); }
+    50% { transform: scale(1.03); filter: blur(1px); }
+  }
+
+  .top-1 .player > *,
+  .top-2 .player > *,
+  .top-3 .player > * {
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: 720px) {
     .card-top {
       flex-direction: column;
@@ -502,9 +610,9 @@
       <div class="card-note">
         <div class="note-icon">✦</div>
         <div class="note-text">
-          <div class="note-title">- Zamer012</div>
+          <div class="note-title">About this board</div>
           <div class="note-desc" id="cardDescription">
-             so uhh, how <strong>TUFF</strong> is the leaderboard guys? :D.
+            This board is fully configurable. Change the player order in the CONFIG list, edit tags, or rename the title and subtitle whenever you want.
           </div>
         </div>
       </div>
@@ -524,9 +632,14 @@
     </section>
 
     <div class="footer">
-      so uhh, how <strong>TUFF</strong> is the leaderboard guys? :D.
+      Edit the <strong>CONFIG</strong> section in the code to customize names, titles, description, and tags.
     </div>
   </main>
+
+  <!-- Hover sound -->
+  <audio id="hoverSound" preload="auto">
+    <source src="sounds/hover1.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const CONFIG = {
@@ -535,14 +648,19 @@
       subtitle: "The damnation of all Comic Gods. From bottom weak to top strong, this board shows the current order of the Comic Creators.",
       cardTitle: "Current Rankings",
       cardHint: "Top 3 are cool ngl",
-      cardDescription: "This is where official Comic Creators will be ranked on how powerful they are in the Comicverse",
+      cardDescription: "This is where official Comic Creators will be ranked on how powerful they are in the Comicverse.",
       players: [
-        { name: "Zamer012", tag: "dunno" },
-        { name: "Guest10", tag: "God of luck" },
+        { name: "Zamer012", tag: "God of Comics" },
+        { name: "Guest10", tag: "God of Luck" },
         { name: "Cham", tag: "Retired :[" },
-        { name: "M.D.A", tag: "4th" },
-        { name: "A.V.C", tag: "5th" },
-        { name: "Kaiju X", tag: "6th" }
+        { name: "O.C", tag: "God of Time" },
+        { name: "Justme21", tag: "God of Armies" },
+        { name: "Xau, Kaiju X, Child", tag: "Pantheon led by Xau" },
+        { name: "Awakened Kohee", tag: "No Title :/" },
+        { name: "Furina De Fontaine", tag: "No Title :/" },
+        { name: "JoachimProKing", tag: "Also known as JPK!" },
+        { name: "JDC", tag: "No Title :/" },
+        { name: "illorath, SP, ladiesmen217", tag: "ALL has No Title :/ (unknown if they have pack)" }
       ]
     };
 
@@ -563,6 +681,31 @@
     document.getElementById("countPill").textContent = `${CONFIG.players.length} member${CONFIG.players.length === 1 ? "" : "s"}`;
 
     const tbody = document.querySelector("#leaderboard tbody");
+    const hoverSound = document.getElementById("hoverSound");
+
+    function addStarsToRow(row, type, count) {
+      const playerCell = row.querySelector(".player");
+      if (!playerCell) return;
+
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement("span");
+        star.className = `star ${type}`;
+
+        const size = type === "gold" ? 7 + Math.random() * 8 : type === "silver" ? 6 + Math.random() * 6 : 5 + Math.random() * 5;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+
+        const top = Math.random() * 18 - 8;
+        const left = Math.random() * 90 + 6;
+        star.style.top = `${top}px`;
+        star.style.left = `${left}%`;
+
+        star.style.animationDelay = `${Math.random() * 2.2}s`;
+        star.style.animationDuration = `${1.1 + Math.random() * 1.8}s`;
+
+        playerCell.appendChild(star);
+      }
+    }
 
     CONFIG.players.forEach((player, index) => {
       const row = document.createElement("tr");
@@ -597,6 +740,17 @@
       row.appendChild(playerCell);
       row.appendChild(statusCell);
       tbody.appendChild(row);
+
+      if (index === 0) addStarsToRow(row, "gold", 10);
+      if (index === 1) addStarsToRow(row, "silver", 6);
+      if (index === 2) addStarsToRow(row, "bronze", 4);
+
+      row.addEventListener("mouseenter", () => {
+        if (!hoverSound) return;
+        hoverSound.currentTime = 0;
+        hoverSound.volume = 0.22;
+        hoverSound.play().catch(() => {});
+      });
     });
   </script>
 </body>
