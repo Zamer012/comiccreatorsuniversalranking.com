@@ -365,6 +365,19 @@
     font-size: 1.1rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     transition: transform 0.3s ease;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .note-icon.img-avatar {
+    background: transparent;
+  }
+
+  .note-icon.img-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
   }
 
   .card-note:hover .note-icon {
@@ -439,6 +452,7 @@
     position: relative;
     background: rgba(255, 255, 255, 0.015);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
 
   tbody tr + tr td {
@@ -448,6 +462,10 @@
   tbody tr:hover {
     background: rgba(255, 255, 255, 0.05);
     transform: translateX(6px);
+  }
+
+  tbody tr:active {
+    transform: translateX(6px) scale(0.99);
   }
 
   td {
@@ -484,6 +502,7 @@
     gap: 16px;
     min-width: 240px;
     position: relative;
+    overflow: visible;
   }
 
   .avatar {
@@ -500,11 +519,20 @@
     flex: 0 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.35s ease;
+    overflow: hidden;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .name-block {
     display: grid;
     gap: 3px;
+    position: relative;
+    z-index: 5;
   }
 
   .name {
@@ -544,6 +572,61 @@
     color: var(--accent);
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
     transition: all 0.15s ease;
+  }
+
+  /* Shimmering Stars */
+  .star {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    opacity: 0;
+    animation: starTwinkle 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.85));
+    z-index: 2;
+  }
+
+  .star::before,
+  .star::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: currentColor;
+    border-radius: 999px;
+  }
+
+  .star::before {
+    width: 100%;
+    height: 18%;
+  }
+
+  .star::after {
+    width: 18%;
+    height: 100%;
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% {
+      transform: scale(0.75) rotate(0deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(1.15) rotate(18deg);
+      opacity: 1;
+    }
+  }
+
+  .star.gold {
+    color: rgba(255, 238, 128, 1);
+  }
+
+  .star.silver {
+    color: rgba(235, 240, 255, 1);
+  }
+
+  .star.bronze {
+    color: rgba(255, 193, 133, 1);
   }
 
   .badge {
@@ -822,7 +905,7 @@
       <div class="eyebrow" id="eyebrowText">Leaderboard</div>
       <h1 id="pageTitle">Comic Creators Leaderboard</h1>
       <p class="subtitle" id="pageSubtitle">
-        a list of the most powerful beings and gods in the Comicverse created by Zamer012. The Rankings are listed by abilities and all their statistics.
+        A smooth, dark, manually controlled ranking page. Edit the list in the code to change the order instantly.
       </p>
     </section>
 
@@ -830,17 +913,17 @@
       <div class="card-top">
         <div class="left">
           <div class="title" id="cardTitle">Current Rankings</div>
-          <div class="hint" id="cardHint">Top 3 are shown here.</div>
+          <div class="hint" id="cardHint">Top 3 are automatically highlighted with special styling.</div>
         </div>
         <div class="pill" id="countPill">0 members</div>
       </div>
 
       <div class="card-note">
-        <div class="note-icon">✦</div>
+        <div class="note-icon" id="noteIcon">✦</div>
         <div class="note-text">
-          <div class="note-title">- Zamer012</div>
+          <div class="note-title" id="noteTitle">About this board</div>
           <div class="note-desc" id="cardDescription">
-            hi shawn
+            This board is fully configurable. Change the player order in the CONFIG list, edit tags, or rename the title and subtitle whenever you want.
           </div>
         </div>
       </div>
@@ -849,9 +932,9 @@
         <table id="leaderboard">
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Player</th>
-              <th class="right">Status</th>
+              <th id="thRank">Rank</th>
+              <th id="thPlayer">Player</th>
+              <th class="right" id="thStatus">Status</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -859,33 +942,76 @@
       </div>
     </section>
 
-    <div class="footer">
-      Wowzers, this is <strong>PEAK</strong>
+    <div class="footer" id="footerText">
+      Edit the <strong>CONFIG</strong> section in the code to customize names, titles, description, and tags.
     </div>
   </main>
 
+  <!-- Hover Sound -->
+  <audio id="hoverSound" preload="auto">
+    <source src="sounds/hover1.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
+    // ==========================================
+    // CONFIGURATION - EDIT EVERYTHING HERE
+    // ==========================================
     const CONFIG = {
+      // Page Text
       pageTitle: "Comic Creators Leaderboard",
       eyebrowText: "Rankings",
       subtitle: "The damnation of all Comic Gods. From bottom weak to top strong, this board shows the current order of the Comic Creators.",
+      
+      // Card Text
       cardTitle: "Current Rankings",
       cardHint: "Top 3 are cool ngl",
-      cardDescription: "This is where official Comic Creators will be ranked on how powerful they are in the Comicverse.",
+      
+      // Note Section (bottom of card header)
+      noteTitle: "- Zamer012",
+      noteDescription: "This is where official Comic Creators will be ranked on how powerful they are in the Comicverse.",
+      noteIcon: "✦", // Can be emoji or leave empty if using image
+      noteIconImage: "", // Optional: URL to image for note icon (e.g., "images/avatar.png")
+      
+      // Table Headers
+      rankHeader: "Rank",
+      playerHeader: "Player",
+      statusHeader: "Status",
+      
+      // Footer
+      footerText: "Wowzers, this is <strong>PEAK</strong>",
+      
+      // Sound Settings
+      hoverSoundEnabled: true,
+      hoverSoundVolume: 0.22,
+      
+      // Star Settings
+      starsEnabled: true,
+      goldStarCount: 10,
+      silverStarCount: 6,
+      bronzeStarCount: 4,
+      
+      // Players List
+      // Each player can have:
+      // - name: Display name (required)
+      // - tag: Status badge text (optional, defaults to "Member")
+      // - image: URL to avatar image (optional, shows initials if not provided)
       players: [
-        { name: "Zamer012", tag: "God of Comics" },
-        { name: "Guest10", tag: "God of Luck" },
-        { name: "Cham", tag: "Retired :[" },
-        { name: "O.C", tag: "God of Time" },
-        { name: "Justme21", tag: "God of Armies" },
-        { name: "Xau, Kaiju X, Child", tag: "Pantheon led by Xau" },
-        { name: "Awakened Kohee", tag: "No Title :/" },
-        { name: "Furina De Fontaine", tag: "No Title :/" },
-        { name: "JoachimProKing", tag: "Also known as JPK!" },
-        { name: "JDC", tag: "No Title :/" },
-        { name: "illorath, SP, ladiesmen217", tag: "ALL has No Title :/ (unknown if they have pack)" }
+        { name: "Zamer012", tag: "God of Comics", image: "" },
+        { name: "Guest10", tag: "God of Luck", image: "" },
+        { name: "Cham", tag: "Retired :[", image: "" },
+        { name: "O.C", tag: "God of Time", image: "" },
+        { name: "Justme21", tag: "God of Armies", image: "" },
+        { name: "Xau, Kaiju X, Child", tag: "Pantheon led by Xau", image: "" },
+        { name: "Awakened Kohee", tag: "No Title :/", image: "" },
+        { name: "Furina De Fontaine", tag: "No Title :/", image: "" },
+        { name: "JoachimProKing", tag: "Also known as JPK!", image: "" },
+        { name: "JDC", tag: "No Title :/", image: "" },
+        { name: "illorath, SP, ladiesmen217", tag: "ALL has No Title :/ (unknown if they have pack)", image: "" }
       ]
     };
+    // ==========================================
+    // END CONFIGURATION
+    // ==========================================
 
     // Initialize particles
     function initParticles() {
@@ -921,10 +1047,25 @@
     document.getElementById("pageSubtitle").textContent = CONFIG.subtitle;
     document.getElementById("cardTitle").textContent = CONFIG.cardTitle;
     document.getElementById("cardHint").textContent = CONFIG.cardHint;
-    document.getElementById("cardDescription").textContent = CONFIG.cardDescription;
+    document.getElementById("noteTitle").textContent = CONFIG.noteTitle;
+    document.getElementById("cardDescription").textContent = CONFIG.noteDescription;
+    document.getElementById("thRank").textContent = CONFIG.rankHeader;
+    document.getElementById("thPlayer").textContent = CONFIG.playerHeader;
+    document.getElementById("thStatus").textContent = CONFIG.statusHeader;
+    document.getElementById("footerText").innerHTML = CONFIG.footerText;
     document.getElementById("countPill").textContent = `${CONFIG.players.length} member${CONFIG.players.length === 1 ? "" : "s"}`;
 
+    // Handle note icon
+    const noteIconEl = document.getElementById("noteIcon");
+    if (CONFIG.noteIconImage) {
+      noteIconEl.className = "note-icon img-avatar";
+      noteIconEl.innerHTML = `<img src="${CONFIG.noteIconImage}" alt="Note icon">`;
+    } else if (CONFIG.noteIcon) {
+      noteIconEl.textContent = CONFIG.noteIcon;
+    }
+
     const tbody = document.querySelector("#leaderboard tbody");
+    const hoverSound = document.getElementById("hoverSound");
 
     // Create letter spans for wiggle effect
     function createWigglyName(name) {
@@ -939,6 +1080,41 @@
         }
       }
       return html;
+    }
+
+    // Add shimmering stars to top players
+    function addStarsToRow(row, type, count) {
+      if (!CONFIG.starsEnabled) return;
+      
+      const playerCell = row.querySelector(".player");
+      if (!playerCell) return;
+
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement("span");
+        star.className = `star ${type}`;
+
+        const size = type === "gold" ? 7 + Math.random() * 8 : type === "silver" ? 6 + Math.random() * 6 : 5 + Math.random() * 5;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+
+        const top = Math.random() * 18 - 8;
+        const left = Math.random() * 90 + 6;
+        star.style.top = `${top}px`;
+        star.style.left = `${left}%`;
+
+        star.style.animationDelay = `${Math.random() * 2.2}s`;
+        star.style.animationDuration = `${1.1 + Math.random() * 1.8}s`;
+
+        playerCell.appendChild(star);
+      }
+    }
+
+    // Play hover sound
+    function playHoverSound() {
+      if (!CONFIG.hoverSoundEnabled || !hoverSound) return;
+      hoverSound.currentTime = 0;
+      hoverSound.volume = CONFIG.hoverSoundVolume;
+      hoverSound.play().catch(() => {});
     }
 
     // Render leaderboard
@@ -964,11 +1140,16 @@
       const isTop3 = index < 3;
       const nameHTML = isTop3 ? createWigglyName(player.name) : player.name;
       
+      // Avatar: use image if provided, otherwise show initials
+      const avatarContent = player.image 
+        ? `<img src="${player.image}" alt="${player.name}">` 
+        : initials(player.name);
+      
       playerCell.innerHTML = `
         <div class="player">
           <div class="player-shimmer"></div>
           ${index === 0 ? '<div class="crown">👑</div>' : ''}
-          <div class="avatar">${initials(player.name)}</div>
+          <div class="avatar">${avatarContent}</div>
           <div class="name-block">
             <div class="name">${nameHTML}</div>
           </div>
@@ -983,6 +1164,14 @@
       row.appendChild(playerCell);
       row.appendChild(statusCell);
       tbody.appendChild(row);
+
+      // Add stars for top 3
+      if (index === 0) addStarsToRow(row, "gold", CONFIG.goldStarCount);
+      if (index === 1) addStarsToRow(row, "silver", CONFIG.silverStarCount);
+      if (index === 2) addStarsToRow(row, "bronze", CONFIG.bronzeStarCount);
+
+      // Hover sound
+      row.addEventListener("mouseenter", playHoverSound);
     });
 
     // Initialize
