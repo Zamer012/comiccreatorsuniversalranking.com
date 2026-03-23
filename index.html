@@ -22,6 +22,16 @@
     --accent: #a78bfa;
     --accent-2: #4fd1c5;
     --shadow: 0 32px 100px rgba(0, 0, 0, 0.55);
+    
+    /* Badge Colors */
+    --badge-legendary: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff4500 100%);
+    --badge-epic: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
+    --badge-rare: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 50%, #06b6d4 100%);
+    --badge-common: linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%);
+    --badge-special: linear-gradient(135deg, #ec4899 0%, #db2777 50%, #be185d 100%);
+    --badge-god: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+    --badge-creator: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+    --badge-unique: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
   }
 
   * {
@@ -444,7 +454,7 @@
   }
 
   thead th:last-child {
-    width: 180px;
+    width: 220px;
     text-align: right;
   }
 
@@ -629,25 +639,6 @@
     color: rgba(255, 193, 133, 1);
   }
 
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 16px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.04);
-    color: #e8ecf8;
-    transition: all 0.3s ease;
-  }
-
-  .badge:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: scale(1.03);
-  }
-
   .right {
     text-align: right;
   }
@@ -791,6 +782,325 @@
     50% { transform: translateX(-50%) translateY(-6px) rotate(3deg); }
   }
 
+  /* ============================================
+     CUSTOMIZABLE BADGES SYSTEM
+     ============================================ */
+  
+  .badges-cell {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 280px;
+  }
+
+  /* Base Badge Styles */
+  .custom-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .custom-badge::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .custom-badge::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 60%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    pointer-events: none;
+  }
+
+  .custom-badge:hover::after {
+    left: 150%;
+  }
+
+  .custom-badge:hover {
+    transform: translateY(-3px) scale(1.05);
+  }
+
+  .custom-badge:active {
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  /* Badge Icon */
+  .badge-icon {
+    font-size: 1em;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  }
+
+  /* Badge Text */
+  .badge-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Legendary Badge */
+  .badge-legendary {
+    background: var(--badge-legendary);
+    color: #1a0f00;
+    box-shadow: 
+      0 4px 20px rgba(255, 140, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    animation: legendaryGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes legendaryGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 20px rgba(255, 140, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 
+        0 4px 30px rgba(255, 140, 0, 0.6),
+        0 0 50px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  /* Epic Badge */
+  .badge-epic {
+    background: var(--badge-epic);
+    color: #ffffff;
+    box-shadow: 
+      0 4px 20px rgba(168, 85, 247, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: epicGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes epicGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 20px rgba(168, 85, 247, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 4px 28px rgba(168, 85, 247, 0.5),
+        0 0 40px rgba(139, 92, 246, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Rare Badge */
+  .badge-rare {
+    background: var(--badge-rare);
+    color: #ffffff;
+    box-shadow: 
+      0 4px 16px rgba(59, 130, 246, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    animation: rareGlow 5s ease-in-out infinite;
+  }
+
+  @keyframes rareGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 16px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    50% {
+      box-shadow: 
+        0 4px 24px rgba(59, 130, 246, 0.45),
+        0 0 35px rgba(14, 165, 233, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  /* Common Badge */
+  .badge-common {
+    background: var(--badge-common);
+    color: #e5e7eb;
+    box-shadow: 0 3px 12px rgba(107, 114, 128, 0.25);
+  }
+
+  /* Special Badge */
+  .badge-special {
+    background: var(--badge-special);
+    color: #ffffff;
+    box-shadow: 
+      0 4px 20px rgba(236, 72, 153, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: specialGlow 3.5s ease-in-out infinite;
+  }
+
+  @keyframes specialGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 20px rgba(236, 72, 153, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 4px 28px rgba(236, 72, 153, 0.5),
+        0 0 40px rgba(219, 39, 119, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* God Badge */
+  .badge-god {
+    background: var(--badge-god);
+    color: #1a0f00;
+    box-shadow: 
+      0 4px 24px rgba(245, 158, 11, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: godGlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes godGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 24px rgba(245, 158, 11, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    50% {
+      box-shadow: 
+        0 6px 35px rgba(245, 158, 11, 0.55),
+        0 0 50px rgba(217, 119, 6, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  /* Creator Badge */
+  .badge-creator {
+    background: var(--badge-creator);
+    color: #ffffff;
+    box-shadow: 
+      0 4px 20px rgba(16, 185, 129, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: creatorGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes creatorGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 20px rgba(16, 185, 129, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 4px 28px rgba(16, 185, 129, 0.5),
+        0 0 40px rgba(5, 150, 105, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Unique Badge */
+  .badge-unique {
+    background: var(--badge-unique);
+    color: #ffffff;
+    box-shadow: 
+      0 4px 20px rgba(244, 63, 94, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: uniqueGlow 3.2s ease-in-out infinite;
+  }
+
+  @keyframes uniqueGlow {
+    0%, 100% {
+      box-shadow: 
+        0 4px 20px rgba(244, 63, 94, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 4px 28px rgba(244, 63, 94, 0.5),
+        0 0 40px rgba(225, 29, 72, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Custom Color Badge */
+  .badge-custom {
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  /* Badge Sparkle Effect */
+  .badge-sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    opacity: 0;
+    animation: badgeSparkle 2s ease-in-out infinite;
+  }
+
+  @keyframes badgeSparkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Badge Ripple on Click */
+  .badge-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+  }
+
+  @keyframes rippleEffect {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  /* Small Badge Variant */
+  .badge-sm {
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    border-radius: 8px;
+  }
+
+  .badge-sm .badge-icon {
+    font-size: 0.9em;
+  }
+
+  /* Large Badge Variant */
+  .badge-lg {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    border-radius: 12px;
+  }
+
   /* Footer */
   .footer {
     color: var(--muted);
@@ -852,6 +1162,25 @@
 
     .letter:hover {
       transform: none !important;
+    }
+
+    .badges-cell {
+      max-width: 180px;
+      gap: 6px;
+    }
+
+    .custom-badge {
+      padding: 6px 10px;
+      font-size: 0.68rem;
+    }
+
+    .badge-lg {
+      padding: 8px 14px;
+      font-size: 0.78rem;
+    }
+
+    thead th:last-child {
+      width: 160px;
     }
   }
 
@@ -947,9 +1276,15 @@
     </div>
   </main>
 
-  <!-- Hover Sound -->
+  <!-- Audio Elements for Sounds -->
   <audio id="hoverSound" preload="auto">
     <source src="sounds/hover1.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="badgeHoverSound" preload="auto">
+    <source src="sounds/badge-hover.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="badgeClickSound" preload="auto">
+    <source src="sounds/badge-click.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -966,16 +1301,16 @@
       cardTitle: "Current Rankings",
       cardHint: "Top 3 are cool ngl",
       
-      // Note Section (bottom of card header)
+      // Note Section
       noteTitle: "- Zamer012",
       noteDescription: "This is where official Comic Creators will be ranked on how powerful they are in the Comicverse.",
-      noteIcon: "✦", // Can be emoji or leave empty if using image
-      noteIconImage: "", // Optional: URL to image for note icon (e.g., "images/avatar.png")
+      noteIcon: "✦",
+      noteIconImage: "",
       
       // Table Headers
       rankHeader: "Rank",
       playerHeader: "Player",
-      statusHeader: "Status",
+      statusHeader: "Badges",
       
       // Footer
       footerText: "Wowzers, this is <strong>PEAK</strong>",
@@ -983,6 +1318,10 @@
       // Sound Settings
       hoverSoundEnabled: true,
       hoverSoundVolume: 0.22,
+      badgeHoverSoundEnabled: true,
+      badgeHoverSoundVolume: 0.18,
+      badgeClickSoundEnabled: true,
+      badgeClickSoundVolume: 0.25,
       
       // Star Settings
       starsEnabled: true,
@@ -990,26 +1329,125 @@
       silverStarCount: 6,
       bronzeStarCount: 4,
       
-      // Players List
+      // Badge Type Definitions (can add custom types)
+      badgeTypes: {
+        legendary: { class: "badge-legendary", defaultIcon: "★" },
+        epic: { class: "badge-epic", defaultIcon: "◆" },
+        rare: { class: "badge-rare", defaultIcon: "◇" },
+        common: { class: "badge-common", defaultIcon: "○" },
+        special: { class: "badge-special", defaultIcon: "♦" },
+        god: { class: "badge-god", defaultIcon: "☆" },
+        creator: { class: "badge-creator", defaultIcon: "✧" },
+        unique: { class: "badge-unique", defaultIcon: "❖" }
+      },
+      
+      // Players List with Badges
       // Each player can have:
       // - name: Display name (required)
-      // - tag: Status badge text (optional, defaults to "Member")
-      // - image: URL to avatar image (optional, shows initials if not provided)
+      // - image: URL to avatar image (optional)
+      // - badges: Array of badge objects (optional)
+      //   Each badge: { text: "Badge Text", type: "legendary|epic|rare|...", icon: "★", size: "sm|normal|lg" }
+      //   Or for custom colors: { text: "Badge", customColor: "#ff6b6b", customBg: "linear-gradient(...)" }
       players: [
-        { name: "Zamer012", tag: "God of Comics", image: "https://i.imgur.com/2jAdvuY.png" },
-        { name: "Guest10", tag: "God of Luck", image: "" },
-        { name: "Cyclecybop", tag: "Retired :[", image: "" },
-        { name: "O.C", tag: "God of Time", image: "" },
-        { name: "Justme21", tag: "God of Armies", image: "" },
-        { name: "Xau, Child", tag: "Pantheon led by Xau", image: "" },
-        { name: "Kaiju X", tag: "in a Pantheon led by Xau", image: "https://i.imgur.com/qQo0pq2.jpeg" },
-        { name: "Awakened Kohee", tag: "No Title :/", image: "" },
-        { name: "Furina De Fontaine", tag: "No Title :/", image: "" },
-        { name: "JoachimProKing", tag: "Also known as JPK!", image: "" },
-        { name: "JDC", tag: "No Title :/", image: "" },
-        { name: "SP", tag: "No Title :/", image: "" },
-        { name: "illorath", tag: "No Title :/", image: "" },
-        { name: "ladiesmen217", tag: "No Title :/", image: "" }
+        { 
+          name: "Zamer012", 
+          image: "https://i.imgur.com/2jAdvuY.png",
+          badges: [
+            { text: "God of Comics", type: "god", icon: "👑" },
+          ]
+        },
+        { 
+          name: "Guest10", 
+          image: "",
+          badges: [
+            { text: "God of Luck", type: "epic", icon: "🎲" },
+            { text: "Fast-Riser", type: "rare", icon: "☘" }
+          ]
+        },
+        { 
+          name: "Cyclecybop", 
+          image: "",
+          badges: [
+            { text: "Retired", type: "common", icon: "💤", size: "sm" }
+          ]
+        },
+        { 
+          name: "O.C", 
+          image: "",
+          badges: [
+            { text: "God of Time", type: "epic", icon: "⏱" },
+          ]
+        },
+        { 
+          name: "Justme21", 
+          image: "",
+          badges: [
+            { text: "God of Armies", type: "epic", icon: "⚔" },
+            { text: "Biggest Army", type: "legendary", icon: "🛡" }
+          ]
+        },
+        { 
+          name: "Xau, Child", 
+          image: "",
+          badges: [
+            { text: "Pantheon Leader", type: "unique", icon: "🏛" },
+            { text: "Leader", type: "creator", icon: "★" }
+          ]
+        },
+        { 
+          name: "Child", 
+          image: "",
+          badges: [
+           { text: "Xau's Pantheon", type: "rare", icon: "◆", size: "sm" }
+          ]
+        },
+        { 
+          name: "Kaiju X", 
+          image: "https://i.imgur.com/qQo0pq2.jpeg",
+          badges: [
+            { text: "Kaiju", type: "special", icon: "🦖" },
+            { text: "Xau's Pantheon", type: "rare", icon: "◆", size: "sm" }
+          ]
+        },
+        { 
+          name: "Awakened Kohee", 
+          image: "",
+          badges: [
+            { text: "Awakened", type: "rare", icon: "✦" }
+          ]
+        },
+        { 
+          name: "Furina De Fontaine", 
+          image: "",
+          badges: []
+        },
+        { 
+          name: "JoachimProKing", 
+          image: "",
+          badges: [
+            { text: "Youtuber", type: "epic", icon: "★", size: "sm" },
+          ]
+        },
+        { 
+          name: "JDC", 
+          image: "",
+          badges: []
+        },
+        { 
+          name: "SP", 
+          image: "",
+          badges: []
+        },
+        { 
+          name: "illorath", 
+          image: "",
+          badges: []
+        },
+        { 
+          name: "ladiesmen217", 
+          image: "",
+          badges: []
+        }
       ]
     };
     // ==========================================
@@ -1069,6 +1507,8 @@
 
     const tbody = document.querySelector("#leaderboard tbody");
     const hoverSound = document.getElementById("hoverSound");
+    const badgeHoverSound = document.getElementById("badgeHoverSound");
+    const badgeClickSound = document.getElementById("badgeClickSound");
 
     // Create letter spans for wiggle effect
     function createWigglyName(name) {
@@ -1083,6 +1523,92 @@
         }
       }
       return html;
+    }
+
+    // Create a badge element
+    function createBadge(badgeConfig) {
+      const badge = document.createElement("span");
+      badge.className = "custom-badge";
+      
+      // Get badge type info
+      const typeInfo = CONFIG.badgeTypes[badgeConfig.type] || CONFIG.badgeTypes.common;
+      
+      // Add type class
+      badge.classList.add(typeInfo.class);
+      
+      // Add size class if specified
+      if (badgeConfig.size === "sm") badge.classList.add("badge-sm");
+      if (badgeConfig.size === "lg") badge.classList.add("badge-lg");
+      
+      // Handle custom colors
+      if (badgeConfig.customBg) {
+        badge.style.background = badgeConfig.customBg;
+        badge.classList.remove(typeInfo.class);
+        badge.classList.add("badge-custom");
+      }
+      if (badgeConfig.customColor) {
+        badge.style.color = badgeConfig.customColor;
+      }
+      
+      // Create icon
+      const icon = badgeConfig.icon || typeInfo.defaultIcon;
+      if (icon) {
+        const iconSpan = document.createElement("span");
+        iconSpan.className = "badge-icon";
+        iconSpan.textContent = icon;
+        badge.appendChild(iconSpan);
+      }
+      
+      // Create text
+      const textSpan = document.createElement("span");
+      textSpan.className = "badge-text";
+      textSpan.textContent = badgeConfig.text;
+      badge.appendChild(textSpan);
+      
+      // Add sparkle effects for legendary/epic badges
+      if (badgeConfig.type === "legendary" || badgeConfig.type === "god") {
+        for (let i = 0; i < 3; i++) {
+          const sparkle = document.createElement("span");
+          sparkle.className = "badge-sparkle";
+          sparkle.style.top = `${20 + Math.random() * 60}%`;
+          sparkle.style.left = `${10 + Math.random() * 80}%`;
+          sparkle.style.animationDelay = `${Math.random() * 2}s`;
+          badge.appendChild(sparkle);
+        }
+      }
+      
+      // Hover sound
+      badge.addEventListener("mouseenter", () => {
+        if (CONFIG.badgeHoverSoundEnabled && badgeHoverSound) {
+          badgeHoverSound.currentTime = 0;
+          badgeHoverSound.volume = CONFIG.badgeHoverSoundVolume;
+          badgeHoverSound.play().catch(() => {});
+        }
+      });
+      
+      // Click sound and ripple effect
+      badge.addEventListener("click", (e) => {
+        // Play click sound
+        if (CONFIG.badgeClickSoundEnabled && badgeClickSound) {
+          badgeClickSound.currentTime = 0;
+          badgeClickSound.volume = CONFIG.badgeClickSoundVolume;
+          badgeClickSound.play().catch(() => {});
+        }
+        
+        // Create ripple
+        const ripple = document.createElement("span");
+        ripple.className = "badge-ripple";
+        const rect = badge.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        badge.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
+      });
+      
+      return badge;
     }
 
     // Add shimmering stars to top players
@@ -1143,7 +1669,6 @@
       const isTop3 = index < 3;
       const nameHTML = isTop3 ? createWigglyName(player.name) : player.name;
       
-      // Avatar: use image if provided, otherwise show initials
       const avatarContent = player.image 
         ? `<img src="${player.image}" alt="${player.name}">` 
         : initials(player.name);
@@ -1159,13 +1684,26 @@
         </div>
       `;
 
-      const statusCell = document.createElement("td");
-      statusCell.className = "right";
-      statusCell.innerHTML = `<span class="badge">${player.tag || "Member"}</span>`;
+      const badgesCell = document.createElement("td");
+      badgesCell.className = "right";
+      
+      const badgesContainer = document.createElement("div");
+      badgesContainer.className = "badges-cell";
+      
+      // Add badges
+if (player.badges && player.badges.length > 0) {
+  player.badges.forEach(badgeConfig => {
+    const badge = createBadge(badgeConfig);
+    badgesContainer.appendChild(badge);
+  });
+}
+// If badges is empty [] or missing, nothing will be rendered
+      
+      badgesCell.appendChild(badgesContainer);
 
       row.appendChild(rankCell);
       row.appendChild(playerCell);
-      row.appendChild(statusCell);
+      row.appendChild(badgesCell);
       tbody.appendChild(row);
 
       // Add stars for top 3
