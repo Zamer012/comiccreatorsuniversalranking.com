@@ -469,6 +469,28 @@
     border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
 
+  /* Row Hover Shimmer */
+  tbody tr::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  tbody tr:hover::after {
+    animation: rowShimmer 1s ease-out forwards;
+  }
+
+  @keyframes rowShimmer {
+    0% { opacity: 1; transform: translateX(-100%); }
+    100% { opacity: 0; transform: translateX(100%); }
+  }
+
   tbody tr:hover {
     background: rgba(255, 255, 255, 0.05);
     transform: translateX(6px);
@@ -481,6 +503,8 @@
   td {
     padding: 18px 26px;
     vertical-align: middle;
+    position: relative;
+    z-index: 2;
   }
 
   .rank-cell {
@@ -515,6 +539,45 @@
     overflow: visible;
   }
 
+  /* Avatar Container for Aura */
+  .avatar-container {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  .avatar-aura {
+    position: absolute;
+    width: 130%;
+    height: 130%;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent));
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.3s;
+    z-index: -1;
+    filter: blur(8px);
+    transform: scale(0.8);
+  }
+
+  tr:hover .avatar-aura {
+    opacity: 0.7;
+    animation: auraSpin 2s linear infinite;
+  }
+  
+  .top-1 .avatar-aura {
+    opacity: 0.4;
+    animation: auraSpin 4s linear infinite;
+  }
+  
+  .top-1:hover .avatar-aura {
+    opacity: 1;
+  }
+
+  @keyframes auraSpin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+  }
+
   .avatar {
     width: 48px;
     height: 48px;
@@ -530,12 +593,16 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.35s ease;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
   }
 
   .avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
   }
 
   .name-block {
@@ -627,34 +694,16 @@
     }
   }
 
-  .star.gold {
-    color: rgba(255, 238, 128, 1);
-  }
+  .star.gold { color: rgba(255, 238, 128, 1); }
+  .star.silver { color: rgba(235, 240, 255, 1); }
+  .star.bronze { color: rgba(255, 193, 133, 1); }
 
-  .star.silver {
-    color: rgba(235, 240, 255, 1);
-  }
-
-  .star.bronze {
-    color: rgba(255, 193, 133, 1);
-  }
-
-  .right {
-    text-align: right;
-  }
+  .right { text-align: right; }
 
   /* Top Rankings Styling */
-  .top-1 {
-    background: linear-gradient(135deg, rgba(255, 213, 79, 0.12), rgba(255, 171, 64, 0.08));
-  }
-
-  .top-2 {
-    background: linear-gradient(135deg, rgba(232, 234, 240, 0.1), rgba(176, 190, 197, 0.06));
-  }
-
-  .top-3 {
-    background: linear-gradient(135deg, rgba(215, 165, 116, 0.1), rgba(161, 136, 127, 0.06));
-  }
+  .top-1 { background: linear-gradient(135deg, rgba(255, 213, 79, 0.12), rgba(255, 171, 64, 0.08)); }
+  .top-2 { background: linear-gradient(135deg, rgba(232, 234, 240, 0.1), rgba(176, 190, 197, 0.06)); }
+  .top-3 { background: linear-gradient(135deg, rgba(215, 165, 116, 0.1), rgba(161, 136, 127, 0.06)); }
 
   .top-1 .rank-badge {
     background: var(--gold);
@@ -865,72 +914,39 @@
   .badge-legendary {
     background: var(--badge-legendary);
     color: #1a0f00;
-    box-shadow: 
-      0 4px 20px rgba(255, 140, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     animation: legendaryGlow 3s ease-in-out infinite;
   }
 
   @keyframes legendaryGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 20px rgba(255, 140, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
-    50% {
-      box-shadow: 
-        0 4px 30px rgba(255, 140, 0, 0.6),
-        0 0 50px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
+    0%, 100% { box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(255, 140, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
   }
 
   /* Epic Badge */
   .badge-epic {
     background: var(--badge-epic);
     color: #ffffff;
-    box-shadow: 
-      0 4px 20px rgba(168, 85, 247, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: epicGlow 4s ease-in-out infinite;
   }
 
   @keyframes epicGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 20px rgba(168, 85, 247, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% {
-      box-shadow: 
-        0 4px 28px rgba(168, 85, 247, 0.5),
-        0 0 40px rgba(139, 92, 246, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
+    0%, 100% { box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+    50% { box-shadow: 0 4px 28px rgba(168, 85, 247, 0.5), 0 0 40px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
   }
 
   /* Rare Badge */
   .badge-rare {
     background: var(--badge-rare);
     color: #ffffff;
-    box-shadow: 
-      0 4px 16px rgba(59, 130, 246, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     animation: rareGlow 5s ease-in-out infinite;
   }
 
   @keyframes rareGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 16px rgba(59, 130, 246, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-    50% {
-      box-shadow: 
-        0 4px 24px rgba(59, 130, 246, 0.45),
-        0 0 35px rgba(14, 165, 233, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
+    0%, 100% { box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+    50% { box-shadow: 0 4px 24px rgba(59, 130, 246, 0.45), 0 0 35px rgba(14, 165, 233, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
   }
 
   /* Common Badge */
@@ -944,103 +960,57 @@
   .badge-special {
     background: var(--badge-special);
     color: #ffffff;
-    box-shadow: 
-      0 4px 20px rgba(236, 72, 153, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: specialGlow 3.5s ease-in-out infinite;
   }
 
   @keyframes specialGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 20px rgba(236, 72, 153, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% {
-      box-shadow: 
-        0 4px 28px rgba(236, 72, 153, 0.5),
-        0 0 40px rgba(219, 39, 119, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
+    0%, 100% { box-shadow: 0 4px 20px rgba(236, 72, 153, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+    50% { box-shadow: 0 4px 28px rgba(236, 72, 153, 0.5), 0 0 40px rgba(219, 39, 119, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
   }
 
   /* God Badge */
   .badge-god {
     background: var(--badge-god);
     color: #1a0f00;
-    box-shadow: 
-      0 4px 24px rgba(245, 158, 11, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 24px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     animation: godGlow 2.5s ease-in-out infinite;
   }
 
   @keyframes godGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 24px rgba(245, 158, 11, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    }
-    50% {
-      box-shadow: 
-        0 6px 35px rgba(245, 158, 11, 0.55),
-        0 0 50px rgba(217, 119, 6, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    }
+    0%, 100% { box-shadow: 0 4px 24px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+    50% { box-shadow: 0 6px 35px rgba(245, 158, 11, 0.55), 0 0 50px rgba(217, 119, 6, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
   }
 
   /* Creator Badge */
   .badge-creator {
     background: var(--badge-creator);
     color: #ffffff;
-    box-shadow: 
-      0 4px 20px rgba(16, 185, 129, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: creatorGlow 4s ease-in-out infinite;
   }
 
   @keyframes creatorGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 20px rgba(16, 185, 129, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% {
-      box-shadow: 
-        0 4px 28px rgba(16, 185, 129, 0.5),
-        0 0 40px rgba(5, 150, 105, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
+    0%, 100% { box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+    50% { box-shadow: 0 4px 28px rgba(16, 185, 129, 0.5), 0 0 40px rgba(5, 150, 105, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
   }
 
   /* Unique Badge */
   .badge-unique {
     background: var(--badge-unique);
     color: #ffffff;
-    box-shadow: 
-      0 4px 20px rgba(244, 63, 94, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(244, 63, 94, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: uniqueGlow 3.2s ease-in-out infinite;
   }
 
   @keyframes uniqueGlow {
-    0%, 100% {
-      box-shadow: 
-        0 4px 20px rgba(244, 63, 94, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% {
-      box-shadow: 
-        0 4px 28px rgba(244, 63, 94, 0.5),
-        0 0 40px rgba(225, 29, 72, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
+    0%, 100% { box-shadow: 0 4px 20px rgba(244, 63, 94, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+    50% { box-shadow: 0 4px 28px rgba(244, 63, 94, 0.5), 0 0 40px rgba(225, 29, 72, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
   }
 
   /* Custom Color Badge */
   .badge-custom {
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   /* Badge Sparkle Effect */
@@ -1056,14 +1026,8 @@
   }
 
   @keyframes badgeSparkle {
-    0%, 100% {
-      opacity: 0;
-      transform: scale(0);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1);
-    }
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
   }
 
   /* Badge Ripple on Click */
@@ -1077,10 +1041,7 @@
   }
 
   @keyframes rippleEffect {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
+    to { transform: scale(4); opacity: 0; }
   }
 
   /* Small Badge Variant */
@@ -1090,15 +1051,87 @@
     border-radius: 8px;
   }
 
-  .badge-sm .badge-icon {
-    font-size: 0.9em;
-  }
+  .badge-sm .badge-icon { font-size: 0.9em; }
 
   /* Large Badge Variant */
   .badge-lg {
     padding: 10px 18px;
     font-size: 0.85rem;
     border-radius: 12px;
+  }
+
+  /* ============================================
+     LIGHTBOX MODAL
+     ============================================ */
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: zoom-out;
+  }
+
+  .lightbox-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 85vh;
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .lightbox-overlay.active .lightbox-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 20px;
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+
+  .lightbox-caption {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   /* Footer */
@@ -1229,6 +1262,15 @@
   <!-- Floating Particles -->
   <div class="particles" id="particles" aria-hidden="true"></div>
 
+  <!-- Lightbox Modal -->
+  <div class="lightbox-overlay" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+      <img src="" alt="Player preview" id="lightbox-img" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
   <main class="wrap">
     <section class="hero">
       <div class="eyebrow" id="eyebrowText">Leaderboard</div>
@@ -1286,6 +1328,9 @@
   <audio id="badgeClickSound" preload="auto">
     <source src="sounds/badge-click.mp3" type="audio/mpeg">
   </audio>
+  <audio id="lightboxSound" preload="auto">
+    <source src="sounds/lightbox-open.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     // ==========================================
@@ -1322,6 +1367,8 @@
       badgeHoverSoundVolume: 0.18,
       badgeClickSoundEnabled: true,
       badgeClickSoundVolume: 0.25,
+      lightboxSoundEnabled: true,
+      lightboxSoundVolume: 0.15,
       
       // Star Settings
       starsEnabled: true,
@@ -1329,7 +1376,10 @@
       silverStarCount: 6,
       bronzeStarCount: 4,
       
-      // Badge Type Definitions (can add custom types)
+      // Lightbox Settings
+      lightboxEnabled: true, // Toggle image zoom functionality
+      
+      // Badge Type Definitions
       badgeTypes: {
         legendary: { class: "badge-legendary", defaultIcon: "★" },
         epic: { class: "badge-epic", defaultIcon: "◆" },
@@ -1341,13 +1391,8 @@
         unique: { class: "badge-unique", defaultIcon: "❖" }
       },
       
-      // Players List with Badges
-      // Each player can have:
-      // - name: Display name (required)
-      // - image: URL to avatar image (optional)
-      // - badges: Array of badge objects (optional)
-      //   Each badge: { text: "Badge Text", type: "legendary|epic|rare|...", icon: "★", size: "sm|normal|lg" }
-      //   Or for custom colors: { text: "Badge", customColor: "#ff6b6b", customBg: "linear-gradient(...)" }
+      // Players List
+      // fullImage: Optional high-res image for lightbox (defaults to 'image' if not provided)
       players: [
         { 
           name: "Zamer012", 
@@ -1458,7 +1503,6 @@
     function initParticles() {
       const container = document.getElementById('particles');
       if (!container) return;
-      
       const particleCount = 20;
       for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
@@ -1509,6 +1553,7 @@
     const hoverSound = document.getElementById("hoverSound");
     const badgeHoverSound = document.getElementById("badgeHoverSound");
     const badgeClickSound = document.getElementById("badgeClickSound");
+    const lightboxSound = document.getElementById("lightboxSound");
 
     // Create letter spans for wiggle effect
     function createWigglyName(name) {
@@ -1530,17 +1575,12 @@
       const badge = document.createElement("span");
       badge.className = "custom-badge";
       
-      // Get badge type info
       const typeInfo = CONFIG.badgeTypes[badgeConfig.type] || CONFIG.badgeTypes.common;
-      
-      // Add type class
       badge.classList.add(typeInfo.class);
       
-      // Add size class if specified
       if (badgeConfig.size === "sm") badge.classList.add("badge-sm");
       if (badgeConfig.size === "lg") badge.classList.add("badge-lg");
       
-      // Handle custom colors
       if (badgeConfig.customBg) {
         badge.style.background = badgeConfig.customBg;
         badge.classList.remove(typeInfo.class);
@@ -1550,7 +1590,6 @@
         badge.style.color = badgeConfig.customColor;
       }
       
-      // Create icon
       const icon = badgeConfig.icon || typeInfo.defaultIcon;
       if (icon) {
         const iconSpan = document.createElement("span");
@@ -1559,13 +1598,11 @@
         badge.appendChild(iconSpan);
       }
       
-      // Create text
       const textSpan = document.createElement("span");
       textSpan.className = "badge-text";
       textSpan.textContent = badgeConfig.text;
       badge.appendChild(textSpan);
       
-      // Add sparkle effects for legendary/epic badges
       if (badgeConfig.type === "legendary" || badgeConfig.type === "god") {
         for (let i = 0; i < 3; i++) {
           const sparkle = document.createElement("span");
@@ -1577,7 +1614,6 @@
         }
       }
       
-      // Hover sound
       badge.addEventListener("mouseenter", () => {
         if (CONFIG.badgeHoverSoundEnabled && badgeHoverSound) {
           badgeHoverSound.currentTime = 0;
@@ -1586,16 +1622,14 @@
         }
       });
       
-      // Click sound and ripple effect
       badge.addEventListener("click", (e) => {
-        // Play click sound
+        e.stopPropagation(); // Prevent row click
         if (CONFIG.badgeClickSoundEnabled && badgeClickSound) {
           badgeClickSound.currentTime = 0;
           badgeClickSound.volume = CONFIG.badgeClickSoundVolume;
           badgeClickSound.play().catch(() => {});
         }
         
-        // Create ripple
         const ripple = document.createElement("span");
         ripple.className = "badge-ripple";
         const rect = badge.getBoundingClientRect();
@@ -1604,7 +1638,6 @@
         ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
         ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
         badge.appendChild(ripple);
-        
         setTimeout(() => ripple.remove(), 600);
       });
       
@@ -1614,26 +1647,19 @@
     // Add shimmering stars to top players
     function addStarsToRow(row, type, count) {
       if (!CONFIG.starsEnabled) return;
-      
       const playerCell = row.querySelector(".player");
       if (!playerCell) return;
 
       for (let i = 0; i < count; i++) {
         const star = document.createElement("span");
         star.className = `star ${type}`;
-
         const size = type === "gold" ? 7 + Math.random() * 8 : type === "silver" ? 6 + Math.random() * 6 : 5 + Math.random() * 5;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
-
-        const top = Math.random() * 18 - 8;
-        const left = Math.random() * 90 + 6;
-        star.style.top = `${top}px`;
-        star.style.left = `${left}%`;
-
+        star.style.top = `${Math.random() * 18 - 8}px`;
+        star.style.left = `${Math.random() * 90 + 6}%`;
         star.style.animationDelay = `${Math.random() * 2.2}s`;
         star.style.animationDuration = `${1.1 + Math.random() * 1.8}s`;
-
         playerCell.appendChild(star);
       }
     }
@@ -1646,6 +1672,40 @@
       hoverSound.play().catch(() => {});
     }
 
+    // Lightbox Logic
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    function openLightbox(src, name) {
+      if (!CONFIG.lightboxEnabled) return;
+      lightboxImg.src = src;
+      lightboxCaption.textContent = name;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      if (CONFIG.lightboxSoundEnabled && lightboxSound) {
+        lightboxSound.currentTime = 0;
+        lightboxSound.volume = CONFIG.lightboxSoundVolume;
+        lightboxSound.play().catch(() => {});
+      }
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
     // Render leaderboard
     CONFIG.players.forEach((player, index) => {
       const row = document.createElement("tr");
@@ -1654,7 +1714,6 @@
       if (index === 1) row.classList.add("top-2");
       if (index === 2) row.classList.add("top-3");
 
-      // Staggered row animation delay
       row.style.animationDelay = `${0.6 + index * 0.05}s`;
 
       const rankCell = document.createElement("td");
@@ -1670,14 +1729,17 @@
       const nameHTML = isTop3 ? createWigglyName(player.name) : player.name;
       
       const avatarContent = player.image 
-        ? `<img src="${player.image}" alt="${player.name}">` 
+        ? `<img src="${player.image}" alt="${player.name}" data-full="${player.fullImage || player.image}">` 
         : initials(player.name);
       
       playerCell.innerHTML = `
         <div class="player">
           <div class="player-shimmer"></div>
           ${index === 0 ? '<div class="crown">👑</div>' : ''}
-          <div class="avatar">${avatarContent}</div>
+          <div class="avatar-container">
+            <div class="avatar-aura"></div>
+            <div class="avatar">${avatarContent}</div>
+          </div>
           <div class="name-block">
             <div class="name">${nameHTML}</div>
           </div>
@@ -1690,14 +1752,11 @@
       const badgesContainer = document.createElement("div");
       badgesContainer.className = "badges-cell";
       
-      // Add badges
-if (player.badges && player.badges.length > 0) {
-  player.badges.forEach(badgeConfig => {
-    const badge = createBadge(badgeConfig);
-    badgesContainer.appendChild(badge);
-  });
-}
-// If badges is empty [] or missing, nothing will be rendered
+      if (player.badges && player.badges.length > 0) {
+        player.badges.forEach(badgeConfig => {
+          badgesContainer.appendChild(createBadge(badgeConfig));
+        });
+      }
       
       badgesCell.appendChild(badgesContainer);
 
@@ -1711,8 +1770,18 @@ if (player.badges && player.badges.length > 0) {
       if (index === 1) addStarsToRow(row, "silver", CONFIG.silverStarCount);
       if (index === 2) addStarsToRow(row, "bronze", CONFIG.bronzeStarCount);
 
-      // Hover sound
+      // Row hover sound
       row.addEventListener("mouseenter", playHoverSound);
+      
+      // Avatar click for lightbox
+      const avatarImg = row.querySelector('.avatar img');
+      if (avatarImg) {
+        avatarImg.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const fullSrc = avatarImg.getAttribute('data-full');
+            openLightbox(fullSrc, player.name);
+        });
+      }
     });
 
     // Initialize
